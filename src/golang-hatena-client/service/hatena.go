@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 
 	"golang-hatena-client/model"
@@ -25,20 +24,12 @@ func (h *HatenaClient) Read(url string) (*model.HatenaFeed, error) {
 		return nil, err
 	}
 
-	body := resp.Body
-	defer body.Close()
-
-	b, err := ioutil.ReadAll(body)
-	if err != nil {
-		fmt.Printf("Error: read error. err: %v", err)
-		return nil, err
-	}
+	defer resp.Body.Close()
 
 	var feed model.HatenaFeed
-	if err := xml.Unmarshal(b, &feed); err != nil {
+	if err := xml.NewDecoder(resp.Body).Decode(&feed); err != nil {
 		fmt.Printf("Error: xml unmarshal error. err:  %v", err)
 		return nil, err
 	}
-
 	return &feed, err
 }

@@ -23,10 +23,10 @@ func GetRSS(w http.ResponseWriter, r *http.Request) {
 	// hatenaが含まれない場合も処理進ませない
 
 	client := service.HatenaClient{}
-	feed, err := client.Read(url)
+	_, err := client.Read(url)
 	if err != nil {
 		fmt.Printf("err: %v", err)
 	}
 
-	fmt.Printf("%v", pp.Sprint(feed))
+	//fmt.Printf("%v", pp.Sprint(feed))
 }
